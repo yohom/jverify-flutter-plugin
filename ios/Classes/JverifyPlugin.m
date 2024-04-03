@@ -164,7 +164,7 @@ NSObject<FlutterPluginRegistrar>* _jv_registrar;
     __block  NSNumber *auth = arguments[@"auth"];
     
     [JGInforCollectionAuth  JCollectionAuth:^(JGInforCollectionAuthItems * _Nonnull authInfo) {
-        authInfo.isAuth = auth;
+        authInfo.isAuth = [auth boolValue];
     }];
 }
 
