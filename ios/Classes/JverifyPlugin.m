@@ -22,6 +22,11 @@ static NSString *const j_phone_key = @"phone";
 static long j_default_timeout = 5000;
 static BOOL needStartAnim = FALSE;
 static BOOL needCloseAnim = FALSE;
+
+@interface JverifyPlugin ()
+@property (nonatomic, copy) void(^hidAgreementAlertView)(void);
+@end
+
 @implementation JverifyPlugin
 
 NSObject<FlutterPluginRegistrar>* _jv_registrar;
@@ -487,6 +492,12 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
     return [JVLayoutConstraint constraintWithAttribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:JVLayoutItemNone attribute:NSLayoutAttributeHeight multiplier:1 constant:height];
 }
 
+- (void)cancelAgreementAlertView {
+    if (self.hidAgreementAlertView) {
+        self.hidAgreementAlertView();
+    }
+}
+
 //自定义授权页面原有的 UI 控件
 - (void)setCustomUIWithUIConfig:(JVUIConfig *)uiconfig configArguments:(NSDictionary *)config {
     JVLog(@"Action - setCustomUIWithUIConfig::");
@@ -737,6 +748,7 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
     //隐私弹窗
     BOOL isAlertPrivacyVc = [[self getValue:config key:@"isAlertPrivacyVc"] boolValue];
     uiconfig.isAlertPrivacyVC = isAlertPrivacyVc;
+    uiconfig.agreementAlertViewShowWindow = YES;
     
     //自定义协议
     NSString *tempSting = @"";
@@ -817,10 +829,56 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
         uiconfig.customPrivacyAlertViewBlock = ^(UIViewController *vc , NSArray *appPrivacys,void(^loginAction)(void)) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请点击同意协议" message:nil preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil] ];
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil] ];
             [vc presentViewController:alert animated:true completion:nil];
             
         };
     }
+    
+    // 二次弹窗自定义视图
+    __weak __typeof(self)weakSelf = self;
+    NSArray *agreementAlertViewWidgets = [self getValue:config key:@"agreementAlertViewWidgets"];
+    uiconfig.customAgreementAlertView = ^(UIView * _Nonnull superView, void (^ _Nonnull hidAlertView)(void)) {
+        weakSelf.hidAgreementAlertView = hidAlertView;
+        for (NSDictionary *widgetDic in agreementAlertViewWidgets) {
+            NSString *type = [self getValue:widgetDic key:@"type"];
+            if ([type isEqualToString:@"textView"]) {
+                [superView addSubview:[self addCustomTextWidget:widgetDic]];
+            }else if ([type isEqualToString:@"button"]){
+                UIButton *cancle = [self addCustomButtonWidget:widgetDic];
+                [superView addSubview:cancle];
+                [cancle addTarget:weakSelf action:@selector(cancelAgreementAlertView) forControlEvents:UIControlEventTouchUpInside];
+            }else{
+                
+            }
+        }
+    };
+    
+    NSDictionary *agreementAlertViewUIFrames = [self getValue:config key:@"agreementAlertViewUIFrames"];
+    
+    uiconfig.resetAgreementAlertViewFrameBlock = ^(NSValue * _Nullable __autoreleasing * _Nullable superViewFrame, NSValue * _Nullable __autoreleasing * _Nullable alertViewFrame, NSValue * _Nullable __autoreleasing * _Nullable titleFrame, NSValue * _Nullable __autoreleasing * _Nullable contentFrame, NSValue * _Nullable __autoreleasing * _Nullable buttonFrame) {
+        NSArray *superView = [agreementAlertViewUIFrames valueForKey:@"superViewFrame"];
+        if (superView && superView.count >= 4) {
+            *superViewFrame = [NSValue valueWithCGRect:CGRectMake([superView[0] intValue], [superView[1] intValue], [superView[2] intValue], [superView[3] intValue])];
+        }
+        NSArray *alertView = [agreementAlertViewUIFrames valueForKey:@"alertViewFrame"];
+        if (alertView && alertView.count >= 4) {
+            *alertViewFrame = [NSValue valueWithCGRect:CGRectMake([alertView[0] intValue], [alertView[1] intValue], [alertView[2] intValue], [alertView[3] intValue])];
+        }
+        NSArray *title = [agreementAlertViewUIFrames valueForKey:@"titleFrame"];
+        if (title && title.count >= 4) {
+            *titleFrame = [NSValue valueWithCGRect:CGRectMake([title[0] intValue], [title[1] intValue], [title[2] intValue], [title[3] intValue])];
+        }
+        NSArray *content = [agreementAlertViewUIFrames valueForKey:@"contentFrame"];
+        if (content && content.count >= 4) {
+            *contentFrame = [NSValue valueWithCGRect:CGRectMake([content[0] intValue], [content[1] intValue], [content[2] intValue], [content[3] intValue])];
+        }
+        NSArray *button = [agreementAlertViewUIFrames valueForKey:@"buttonFrame"];
+        if (button && button.count >= 4) {
+            *buttonFrame = [NSValue valueWithCGRect:CGRectMake([button[0] intValue], [button[1] intValue], [button[2] intValue], [button[3] intValue])];
+        }
+    };
+    
     
     BOOL isCenter = [[self getValue:config key:@"privacyTextCenterGravity"] boolValue];
     NSTextAlignment alignmet = isCenter?NSTextAlignmentCenter:NSTextAlignmentLeft;

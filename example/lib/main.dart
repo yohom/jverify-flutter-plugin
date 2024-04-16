@@ -410,6 +410,7 @@ class _MyAppState extends State<MyApp> {
         uiConfig.privacyNavReturnBtnImage = "back"; //图片必须存在;
 
         //协议二次弹窗内容设置 -iOS
+        uiConfig.isAlertPrivacyVc = true;
         uiConfig.agreementAlertViewTitleTexSize = 18;
         uiConfig.agreementAlertViewTitleTextColor = Colors.red.value;
         uiConfig.agreementAlertViewContentTextAlignment =
@@ -441,11 +442,13 @@ class _MyAppState extends State<MyApp> {
         privacyCheckDialogConfig.logBtnMarginL = 10;
         privacyCheckDialogConfig.logBtnWidth = 140;
         privacyCheckDialogConfig.logBtnHeight = 40;
+
         /// 添加自定义的 控件 到dialog
         List<JVCustomWidget> dialogWidgetList = [];
-        final String btn_dialog_widgetId = "jv_add_custom_dialog_button"; // 标识控件 id
+        final String btn_dialog_widgetId =
+            "jv_add_custom_dialog_button"; // 标识控件 id
         JVCustomWidget buttonDialogWidget =
-        JVCustomWidget(btn_dialog_widgetId, JVCustomWidgetType.button);
+            JVCustomWidget(btn_dialog_widgetId, JVCustomWidgetType.button);
         buttonDialogWidget.title = "取消";
         buttonDialogWidget.left = 163;
         buttonDialogWidget.top = 142;
@@ -470,8 +473,10 @@ class _MyAppState extends State<MyApp> {
 
         //sms
         JVSMSUIConfig smsConfig = JVSMSUIConfig();
-        smsConfig.smsPrivacyBeanList = [JVPrivacy("自定义协议1", "http://www.baidu.com",
-            beforeName: "==", afterName: "++", separator: "*")];
+        smsConfig.smsPrivacyBeanList = [
+          JVPrivacy("自定义协议1", "http://www.baidu.com",
+              beforeName: "==", afterName: "++", separator: "*")
+        ];
         smsConfig.enableSMSService = true;
         uiConfig.smsUIConfig = smsConfig;
 
@@ -532,6 +537,16 @@ class _MyAppState extends State<MyApp> {
         });
         widgetList.add(buttonWidget);
 
+        // 设置iOS的二次弹窗按钮
+        uiConfig.agreementAlertViewWidgets = dialogWidgetList;
+        uiConfig.agreementAlertViewUIFrames = {
+          "superViewFrame": [10, 60, 280, 300],
+          "alertViewFrame": [0, 0, 280, 300],
+          "titleFrame": [10, 10, 260, 40],
+          "contentFrame": [15, 60, 250, 110],
+          "buttonFrame": [10, 200, 100, 40]
+        };
+
         /// 步骤 1：调用接口设置 UI
         jverify.setCustomAuthorizationView(true, uiConfig,
             landscapeConfig: uiConfig, widgets: widgetList);
@@ -550,16 +565,17 @@ class _MyAppState extends State<MyApp> {
               });
         } else {
           /// 步骤 2：调用短信登录接口
-          jverify.smsAuth(autoDismiss: true, smsCallback: (event) {
-            setState(() {
-              _hideLoading();
-              _result = "获取返回数据：[${event.code}] message = ${event.message}";
-            });
-            print(
-                "获取到 smsAuth 接口返回数据，code=${event.code},message = ${event.message},phone = ${event.phone}");
-          });
+          jverify.smsAuth(
+              autoDismiss: true,
+              smsCallback: (event) {
+                setState(() {
+                  _hideLoading();
+                  _result = "获取返回数据：[${event.code}] message = ${event.message}";
+                });
+                print(
+                    "获取到 smsAuth 接口返回数据，code=${event.code},message = ${event.message},phone = ${event.phone}");
+              });
         }
-
       } else {
         setState(() {
           _hideLoading();

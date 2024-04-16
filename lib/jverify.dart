@@ -34,7 +34,6 @@ typedef JVLoginAuthCallBackListener = void Function(JVListenerEvent event);
  * */
 typedef JVSMSListener = void Function(JVSMSEvent event);
 
-
 /**
  * SDK 初始接口回调监听
  *
@@ -45,7 +44,6 @@ typedef JVSMSListener = void Function(JVSMSEvent event);
  * @discussion 调用 setup 接口后，可以通过添加此监听事件来监听接口的返回结果
  * */
 typedef JVSDKSetupCallBackListener = void Function(JVSDKSetupEvent event);
-
 
 class JVEventHandlers {
   static final JVEventHandlers _instance = new JVEventHandlers._internal();
@@ -65,7 +63,6 @@ class JVEventHandlers {
   Map<int, JVAuthPageEventListener> authPageEventsMap = {};
   Map<int, JVLoginAuthCallBackListener> loginAuthCallBackEventsMap = {};
   Map<int, JVSMSListener> smsCallBackEventsMap = {};
-
 }
 
 class Jverify {
@@ -143,7 +140,6 @@ class Jverify {
         break;
       case 'onReceiveLoginAuthCallBackEvent':
         {
-
           Map json = call.arguments.cast<dynamic, dynamic>();
           print(json.toString());
 
@@ -162,12 +158,10 @@ class Jverify {
             cb(event);
             _eventHanders.loginAuthCallBackEvents.remove(cb);
           }
-
         }
         break;
       case 'onReceiveSMSAuthCallBackEvent':
         {
-
           Map json = call.arguments.cast<dynamic, dynamic>();
           print(json.toString());
           JVSMSEvent event = JVSMSEvent.fromJson(json);
@@ -178,7 +172,6 @@ class Jverify {
               _eventHanders.smsCallBackEventsMap.remove(index);
             }
           }
-
         }
         break;
       case 'onReceiveSDKSetupCallBackEvent':
@@ -475,8 +468,6 @@ class Jverify {
     }
   }
 
-
-
   /*
   * 短信登录
   *
@@ -489,8 +480,8 @@ class Jverify {
   * */
   void smsAuth(
       {required bool autoDismiss,
-        int timeout = 5000,
-        JVSMSListener? smsCallback}) {
+      int timeout = 5000,
+      JVSMSListener? smsCallback}) {
     print("$flutter_log" + "smsAuth");
 
     String method = "smsAuth";
@@ -737,38 +728,37 @@ class JVUIConfig {
   JVIOSUIModalTransitionStyle modelTransitionStyle = //弹出方式 only ios
       JVIOSUIModalTransitionStyle.CoverVertical;
 
-  /*** 协议二次弹窗-iOS */
-
-  /**协议二次弹窗标题文本样式*/
-  int agreementAlertViewTitleTexSize = 14;
-
-  /**协议二次弹窗标题文本颜色*/
-  int? agreementAlertViewTitleTextColor;
-
-  /**协议二次弹窗内容文本对齐方式*/
+  /// 协议二次弹窗-iOS
+  int agreementAlertViewTitleTexSize = 14; // 协议二次弹窗标题文本样式
+  int? agreementAlertViewTitleTextColor; //协议二次弹窗标题文本颜色
   JVTextAlignmentType agreementAlertViewContentTextAlignment =
-      JVTextAlignmentType.center;
+      JVTextAlignmentType.center; //协议二次弹窗内容文本对齐方式
+  int agreementAlertViewContentTextFontSize = 12; //协议二次弹窗内容文本字体大小
+  String? agreementAlertViewLoginBtnNormalImagePath; // 协议二次弹窗登录按钮背景图片 - 激活状态的图片
+  String?
+      agreementAlertViewLoginBtnPressedImagePath; // 协议二次弹窗登录按钮背景图片 - 高亮状态的图片
+  String? agreementAlertViewLoginBtnUnableImagePath; //协议二次弹窗登录按钮背景图片 - 失效状态的图片
+  int? agreementAlertViewLogBtnTextColor; //协议二次弹窗登录按钮文本颜色
+  List<JVCustomWidget>? agreementAlertViewWidgets; //协议二次弹窗自定义视图
+  Map<String, List<int>>?
+      agreementAlertViewUIFrames; // 协议二次弹窗各控件的frame设置 { "superViewFrame": [left, top, width, height],"alertViewFrame": [left, top, width, height],"titleFrame": [left, top, width, height],"contentFrame": [left, top, width, height],"buttonFrame": [left, top, width, height]};
 
-  /**协议二次弹窗内容文本字体大小*/
-  int agreementAlertViewContentTextFontSize = 12;
+  bool setIsPrivacyViewDarkMode = true; //协议页面是否支持暗黑模式
 
-/**协议二次弹窗登录按钮背景图片
- 激活状态的图片,失效状态的图片,高亮状态的图片
- */
-  String? agreementAlertViewLoginBtnNormalImagePath;
-  String? agreementAlertViewLoginBtnPressedImagePath;
-  String? agreementAlertViewLoginBtnUnableImagePath;
-
-/**协议二次弹窗登录按钮文本颜色*/
-  int? agreementAlertViewLogBtnTextColor;
-
-/**协议页面是否支持暗黑模式*/
-  bool setIsPrivacyViewDarkMode = true;
-
-  /** sms UI**/
+  /// sms UI
   JVSMSUIConfig? smsUIConfig;
 
   Map toJsonMap() {
+    var agreementAlertViewWidgetsList = [];
+
+    if (agreementAlertViewWidgets != null) {
+      for (JVCustomWidget widget in agreementAlertViewWidgets!) {
+        var para2 = widget.toJsonMap();
+        para2.removeWhere((key, value) => value == null);
+        agreementAlertViewWidgetsList.add(para2);
+      }
+    }
+
     return {
       "privacyItem": privacyItem != null ? json.encode(privacyItem) : null,
       "authBackgroundImage": authBackgroundImage ??= null,
@@ -892,6 +882,8 @@ class JVUIConfig {
           agreementAlertViewLoginBtnUnableImagePath ??= null,
       "agreementAlertViewLogBtnTextColor": agreementAlertViewLogBtnTextColor ??=
           Colors.black.value,
+      "agreementAlertViewWidgets": agreementAlertViewWidgetsList,
+      "agreementAlertViewUIFrames": agreementAlertViewUIFrames ??= null,
       "privacyCheckDialogConfig": privacyCheckDialogConfig != null
           ? privacyCheckDialogConfig?.toJsonMap()
           : null,
@@ -969,7 +961,6 @@ class JVPrivacyCheckDialogConfig {
   }
 
   Map toJsonMap() {
-
     var widgetList = [];
 
     if (widgets != null) {
@@ -979,7 +970,6 @@ class JVPrivacyCheckDialogConfig {
         widgetList.add(para2);
       }
     }
-
 
     return {
       "width": width,
@@ -1328,7 +1318,7 @@ enum JVTextAlignmentType { left, right, center }
 /// SMS监听返回类
 class JVSMSEvent {
   int?
-  code; //返回码，具体事件返回码请查看（https://docs.jiguang.cn/jverification/client/android_api/）
+      code; //返回码，具体事件返回码请查看（https://docs.jiguang.cn/jverification/client/android_api/）
   String? message; //事件描述、事件返回值等
   String? phone; //电话号
 
