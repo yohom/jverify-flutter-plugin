@@ -1120,7 +1120,8 @@ public class JverifyPlugin implements FlutterPlugin, MethodCallHandler {
                 Object logBtnMarginB = valueForKey(privacyCheckDialogConfigMap, "logBtnMarginB");
                 Object dialogLogBtnWidth = valueForKey(privacyCheckDialogConfigMap, "logBtnWidth");
                 Object dialogLogBtnHeight = valueForKey(privacyCheckDialogConfigMap, "logBtnHeight");
-
+                Object privacyBackgroundColor = valueForKey(privacyCheckDialogConfigMap, "privacyBackgroundColor");
+                Object privacyBackgroundPath = valueForKey(privacyCheckDialogConfigMap, "privacyBackgroundPath");
 
                 if(dialogLoginBtnText !=null) {
                     builder.setPrivacyCheckDialogLogBtnText((String) dialogLoginBtnText);
@@ -1153,6 +1154,19 @@ public class JverifyPlugin implements FlutterPlugin, MethodCallHandler {
                     builder.setPrivacyCheckDialogLogBtnHeight((int) dialogLogBtnHeight);
                 }
 
+                if(privacyBackgroundColor !=null) {
+                    if (privacyBackgroundColor instanceof Long) {
+                        builder.setPrivacyCheckDialogBackgroundColor(((Long) privacyBackgroundColor).intValue());
+                    } else {
+                        builder.setPrivacyCheckDialogBackgroundColor((int) privacyBackgroundColor);
+                    }
+                }
+                if(privacyBackgroundPath != null){
+                    int res_id_privacyBackgroundPath = getResourceByReflect((String) privacyBackgroundPath);
+                    if (res_id_privacyBackgroundPath > 0) {
+                        builder.setPrivacyCheckDialogBackgroundImgPath((String) privacyBackgroundPath);
+                    }
+                }
                 Object widgets = valueForKey(privacyCheckDialogConfigMap,"widgets");
                 if (widgets != null) {
                     List<Map> widgetList = (List) widgets;
@@ -1736,6 +1750,14 @@ public class JverifyPlugin implements FlutterPlugin, MethodCallHandler {
         RelativeLayout.LayoutParams mLayoutParams1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         mLayoutParams1.leftMargin = dp2Pix(context, (float) left);
         mLayoutParams1.topMargin = dp2Pix(context, (float) top);
+
+
+        //在内容下方
+        Boolean belowTheDialogContent = (Boolean) para.get("belowTheDialogContent");
+        if (belowTheDialogContent) {
+            mLayoutParams1.addRule(RelativeLayout.BELOW, 2002);
+        }
+
         if (width > 0) {
             mLayoutParams1.width = dp2Pix(context, (float) width);
         }

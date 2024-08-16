@@ -955,6 +955,8 @@ class JVPrivacyCheckDialogConfig {
   int? logBtnMarginB; //协议⼆次弹窗登录按钮下边距
   int? logBtnWidth; //协议⼆次弹窗登录按钮宽
   int? logBtnHeight; //协议⼆次弹窗登录按高
+  int? privacyBackgroundColor; //隐私协议二次弹窗背景色
+  String? privacyBackgroundPath; //隐私协议二次弹窗背景图片
 
   JVPrivacyCheckDialogConfig() {
     this.enablePrivacyCheckDialog = true;
@@ -993,6 +995,8 @@ class JVPrivacyCheckDialogConfig {
       "logBtnMarginB": logBtnMarginB,
       "logBtnWidth": logBtnWidth,
       "logBtnHeight": logBtnHeight,
+      "privacyBackgroundColor": privacyBackgroundColor,
+      "privacyBackgroundPath": privacyBackgroundPath,
     }..removeWhere((key, value) => value == null);
   }
 }
@@ -1284,6 +1288,9 @@ class JVCustomWidget {
   ///是否显示下划线，默认：不显示
   bool isClickEnable = false;
 
+  //隐私协议二次弹窗专用  only android
+  bool belowTheDialogContent = false;
+
   ///是否可点击，默认：不可点击
 
   Map toJsonMap() {
@@ -1301,6 +1308,7 @@ class JVCustomWidget {
       "btnPressedImageName": btnPressedImageName,
       "lines": lines,
       "isSingleLine": isSingleLine,
+      "belowTheDialogContent": belowTheDialogContent,
       "left": left,
       "top": top,
       "width": width,
