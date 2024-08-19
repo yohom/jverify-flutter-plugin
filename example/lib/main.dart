@@ -369,15 +369,16 @@ class _MyAppState extends State<MyApp> {
         uiConfig.privacyVerticalLayoutItem = JVIOSLayoutItem.ItemSuper;
         uiConfig.clauseName = "协议1";
         uiConfig.clauseUrl = "http://www.baidu.com";
-        uiConfig.clauseBaseColor = Colors.black.value;
+        uiConfig.clauseBaseColor =
+            const Color.fromARGB(255, 236, 216, 216).value;
         uiConfig.clauseNameTwo = "协议二";
         uiConfig.clauseUrlTwo = "http://www.hao123.com";
-        uiConfig.clauseColor = Colors.red.value;
-        uiConfig.privacyText = ["1极", "4证"];
+        uiConfig.clauseColor = const Color.fromARGB(255, 128, 120, 89).value;
+        uiConfig.privacyText = ["我已阅读并同意", "尾部文字"];
         uiConfig.privacyTextSize = 13;
         uiConfig.privacyItem = [
           JVPrivacy("自定义协议1", "http://www.baidu.com",
-              beforeName: "==", afterName: "++", separator: "*"),
+              beforeName: "==", afterName: "++", separator: "、"),
           JVPrivacy("自定义协议2", "http://www.baidu.com", separator: "、"),
           JVPrivacy("自定义协议3", "http://www.baidu.com", separator: "、"),
           JVPrivacy("自定义协议4", "http://www.baidu.com", separator: "、"),
@@ -411,15 +412,29 @@ class _MyAppState extends State<MyApp> {
 
         //协议二次弹窗内容设置 -iOS
         uiConfig.isAlertPrivacyVc = true;
-        uiConfig.agreementAlertViewTitleTexSize = 18;
-        uiConfig.agreementAlertViewTitleTextColor = Colors.red.value;
+        uiConfig.agreementAlertViewCornerRadius = 15;
+        uiConfig.agreementAlertViewBackgroundColor =
+            const Color.fromARGB(255, 28, 27, 32).value;
+        uiConfig.agreementAlertViewTitleTextColor = Colors.white.value;
+        uiConfig.agreementAlertViewTitleText =
+            "Please Read And Agree to The Following Terms";
+        uiConfig.agreementAlertViewTitleTexSize = 16;
         uiConfig.agreementAlertViewContentTextAlignment =
             JVTextAlignmentType.center;
-        uiConfig.agreementAlertViewContentTextFontSize = 16;
-        uiConfig.agreementAlertViewLoginBtnNormalImagePath = "login_btn_normal";
-        uiConfig.agreementAlertViewLoginBtnPressedImagePath = "login_btn_press";
-        uiConfig.agreementAlertViewLoginBtnUnableImagePath = "login_btn_unable";
-        uiConfig.agreementAlertViewLogBtnTextColor = Colors.black.value;
+        uiConfig.agreementAlertViewContentTextFontSize = 13;
+        // uiConfig.agreementAlertViewLoginBtnNormalImagePath = "login_btn_normal";
+        // uiConfig.agreementAlertViewLoginBtnPressedImagePath = "login_btn_press";
+        // uiConfig.agreementAlertViewLoginBtnUnableImagePath = "login_btn_unable";
+        uiConfig.agreementAlertViewLoginBtnNormalImagePath =
+            "login_btn_normal_dark";
+        uiConfig.agreementAlertViewLoginBtnPressedImagePath =
+            "login_btn_normal_dark";
+        uiConfig.agreementAlertViewLoginBtnUnableImagePath =
+            "login_btn_normal_dark";
+        uiConfig.agreementAlertViewLogBtnText = "同意";
+        uiConfig.agreementAlertViewLogBtnTextFontSize = 13;
+        uiConfig.agreementAlertViewLogBtnTextColor =
+            const Color.fromARGB(255, 128, 120, 89).value;
 
         //协议二次弹窗内容设置 -Android
         JVPrivacyCheckDialogConfig privacyCheckDialogConfig =
@@ -450,8 +465,9 @@ class _MyAppState extends State<MyApp> {
         JVCustomWidget buttonDialogWidget =
             JVCustomWidget(btn_dialog_widgetId, JVCustomWidgetType.button);
         buttonDialogWidget.title = "取消";
-        buttonDialogWidget.left = 163;
-        buttonDialogWidget.top = 142;
+        buttonDialogWidget.titleColor = Colors.white.value;
+        buttonDialogWidget.left = 0;
+        buttonDialogWidget.top = 160;
         buttonDialogWidget.width = 140;
         buttonDialogWidget.height = 40;
         buttonDialogWidget.textAlignment = JVTextAlignmentType.center;
@@ -540,11 +556,16 @@ class _MyAppState extends State<MyApp> {
         // 设置iOS的二次弹窗按钮
         uiConfig.agreementAlertViewWidgets = dialogWidgetList;
         uiConfig.agreementAlertViewUIFrames = {
-          "superViewFrame": [10, 60, 280, 300],
-          "alertViewFrame": [0, 0, 280, 300],
-          "titleFrame": [10, 10, 260, 40],
-          "contentFrame": [15, 60, 250, 110],
-          "buttonFrame": [10, 200, 100, 40]
+          "superViewFrame": [
+            (screenWidth ~/ 2).toInt() - 140,
+            (screenHeight ~/ 2).toInt() - 150,
+            280,
+            200
+          ],
+          "alertViewFrame": [0, 0, 280, 200],
+          "titleFrame": [10, 10, 260, 60],
+          "contentFrame": [15, 70, 250, 110],
+          "buttonFrame": [140, 160, 140, 40]
         };
 
         /// 步骤 1：调用接口设置 UI

@@ -1015,6 +1015,23 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
     
     /************** 协议二次弹窗样式***************/
     
+    NSNumber *agreementAlertViewCornerRadius = [self getValue:config key:@"agreementAlertViewCornerRadius"];
+    uiconfig.windowCornerRadius = [agreementAlertViewCornerRadius floatValue];
+    
+    NSString *agreementAlertViewTitleText = [self getValue:config key:@"agreementAlertViewTitleText"];
+    uiconfig.agreementAlertViewTitleText = agreementAlertViewTitleText;
+    
+    NSNumber *agreementAlertViewBackgroundColorInt = [self getValue:config key:@"agreementAlertViewBackgroundColor"];
+    if (agreementAlertViewBackgroundColorInt) {
+        UIColor *agreementAlertViewBackgroundColor = UIColorFromRGB([agreementAlertViewBackgroundColorInt integerValue]);
+        uiconfig.agreementAlertViewBackgroundColor = agreementAlertViewBackgroundColor;
+    }
+    
+    UIImage *agreementAlertViewBackgroundImg = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewBackgroundImgPath"]] ? : nil;
+    if (agreementAlertViewBackgroundImg) {
+        uiconfig.agreementAlertViewBackgroundImage = agreementAlertViewBackgroundImg;
+    }
+    
     NSInteger agreementAlertViewTitleTexSize = [[self getValue:config key:@"agreementAlertViewTitleTexSize"] integerValue];
     uiconfig.agreementAlertViewTitleTexFont = [UIFont systemFontOfSize:agreementAlertViewTitleTexSize];
     
@@ -1030,6 +1047,12 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
     NSInteger agreementAlertViewContentTextFontSize = [[self getValue:config key:@"agreementAlertViewContentTextFontSize"] integerValue];
     uiconfig.agreementAlertViewContentTextFontSize = agreementAlertViewContentTextFontSize;
     
+    
+    NSString *agreementAlertViewLogBtnText = [self getValue:config key:@"agreementAlertViewLogBtnText"];
+    uiconfig.agreementAlertViewLogBtnText = agreementAlertViewLogBtnText;
+    
+    NSInteger agreementAlertViewLogBtnTextFontSize = [[self getValue:config key:@"agreementAlertViewLogBtnTextFontSize"] integerValue];
+    uiconfig.agreementAlertViewLogBtnTextFontSize = agreementAlertViewLogBtnTextFontSize;
     
     UIImage *agreementAlertViewLoginBtnNormalImage = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewLoginBtnNormalImagePath"]] ? : [UIImage imageNamed:@"login_btn_normal"];
     UIImage *agreementAlertViewLoginBtnPressedImage = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewLoginBtnPressedImagePath"]] ? : [UIImage imageNamed:@"login_btn_press"];
@@ -1084,11 +1107,11 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
     
     NSDictionary *smsUIConfig = [config valueForKey:@"smsUIConfig"];
     if (smsUIConfig && [smsUIConfig isKindOfClass:[NSDictionary class]]) {
-        [self setCustomSmsUIConfig:uiconfig smsUIConfigArguments:smsUIConfig];
+        [self setCustomSmsUIConfig:uiconfig smsUIConfigArguments:smsUIConfig config:config];
     }
 }
 
-- (void)setCustomSmsUIConfig:(JVUIConfig *)uiConfig smsUIConfigArguments:(NSDictionary *)smsUIConfig {
+- (void)setCustomSmsUIConfig:(JVUIConfig *)uiConfig smsUIConfigArguments:(NSDictionary *)smsUIConfig config:(NSDictionary *)config{
     
     NSString *smsAuthPageBackgroundImagePath = [self getValue:smsUIConfig key:@"smsAuthPageBackgroundImagePath"];
     if (smsAuthPageBackgroundImagePath) {
@@ -1517,6 +1540,110 @@ JVLayoutConstraint *JVLayoutHeight(CGFloat height) {
         
     }
     uiConfig.smsAppPrivacys = smsAppPrivacys;
+    
+    
+    /************** 协议二次弹窗样式 先用一键登录页面的二次弹窗设置设置 ***************/
+    BOOL isAlertPrivacyVc = [[self getValue:config key:@"isAlertPrivacyVc"] boolValue];
+    uiConfig.isSmsAlertPrivacyVC = isAlertPrivacyVc;
+    uiConfig.smsAgreementAlertViewShowWindow = YES;
+    
+    NSNumber *agreementAlertViewCornerRadius = [self getValue:config key:@"agreementAlertViewCornerRadius"];
+    uiConfig.smsWindowCornerRadius = [agreementAlertViewCornerRadius floatValue];
+    
+    NSString *agreementAlertViewTitleText = [self getValue:config key:@"agreementAlertViewTitleText"];
+    uiConfig.smsAgreementAlertViewTitleText = agreementAlertViewTitleText;
+    
+    NSNumber *agreementAlertViewBackgroundColorInt = [self getValue:config key:@"agreementAlertViewBackgroundColor"];
+    if (agreementAlertViewBackgroundColorInt) {
+        UIColor *agreementAlertViewBackgroundColor = UIColorFromRGB([agreementAlertViewBackgroundColorInt integerValue]);
+        uiConfig.smsAgreementAlertViewBackgroundColor = agreementAlertViewBackgroundColor;
+    }
+    
+    UIImage *agreementAlertViewBackgroundImg = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewBackgroundImgPath"]] ? : nil;
+    if (agreementAlertViewBackgroundImg) {
+        uiConfig.smsAgreementAlertViewBackgroundImage = agreementAlertViewBackgroundImg;
+    }
+    
+    NSInteger agreementAlertViewTitleTexSize = [[self getValue:config key:@"agreementAlertViewTitleTexSize"] integerValue];
+    uiConfig.smsAgreementAlertViewTitleTexFont = [UIFont systemFontOfSize:agreementAlertViewTitleTexSize];
+    
+    NSNumber *agreementAlertViewTitleTextColorInt = [self getValue:config key:@"agreementAlertViewTitleTextColor"];
+    if (agreementAlertViewTitleTextColorInt) {
+        UIColor *agreementAlertViewTitleTextColor = UIColorFromRGB([agreementAlertViewTitleTextColorInt integerValue]);
+        uiConfig.smsAgreementAlertViewTitleTextColor = agreementAlertViewTitleTextColor;
+    }
+    
+    NSTextAlignment agreementAlertViewContentTextAlignment = [[self getValue:config key:@"agreementAlertViewContentTextAlignment"] integerValue];
+    uiConfig.smsAgreementAlertViewContentTextAlignment = NSTextAlignmentLeft;
+    
+    NSInteger agreementAlertViewContentTextFontSize = [[self getValue:config key:@"agreementAlertViewContentTextFontSize"] integerValue];
+    uiConfig.smsAgreementAlertViewContentTextFontSize = agreementAlertViewContentTextFontSize;
+    
+    
+    NSString *agreementAlertViewLogBtnText = [self getValue:config key:@"agreementAlertViewLogBtnText"];
+    uiConfig.smsAgreementAlertViewLogBtnText = agreementAlertViewLogBtnText;
+    
+    NSInteger agreementAlertViewLogBtnTextFontSize = [[self getValue:config key:@"agreementAlertViewLogBtnTextFontSize"] integerValue];
+    uiConfig.smsAgreementAlertViewLogBtnTextFontSize = agreementAlertViewLogBtnTextFontSize;
+    
+    UIImage *agreementAlertViewLoginBtnNormalImage = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewLoginBtnNormalImagePath"]] ? : [UIImage imageNamed:@"login_btn_normal"];
+    UIImage *agreementAlertViewLoginBtnPressedImage = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewLoginBtnPressedImagePath"]] ? : [UIImage imageNamed:@"login_btn_press"];
+    UIImage *agreementAlertViewLoginBtnUnableImage = [UIImage imageNamed:[config objectForKey:@"agreementAlertViewLoginBtnUnableImagePath"]] ? : [UIImage imageNamed:@"login_btn_unable"];
+    if(agreementAlertViewLoginBtnNormalImage && agreementAlertViewLoginBtnPressedImage && agreementAlertViewLoginBtnUnableImage){
+        NSArray * agreementAlertViewLogBtnImgs =[[NSArray alloc]initWithObjects:agreementAlertViewLoginBtnNormalImage,agreementAlertViewLoginBtnPressedImage,agreementAlertViewLoginBtnUnableImage,nil];
+        uiConfig.smsAgreementAlertViewLogBtnImgs = agreementAlertViewLogBtnImgs;
+    }
+    
+ 
+    NSNumber *agreementAlertViewLogBtnTextColorInt = [self getValue:config key:@"agreementAlertViewLogBtnTextColor"];
+    if (agreementAlertViewLogBtnTextColorInt) {
+        UIColor *agreementAlertViewLogBtnTextColor = UIColorFromRGB([agreementAlertViewLogBtnTextColorInt integerValue]);
+        uiConfig.smsAgreementAlertViewLogBtnTextColor = agreementAlertViewLogBtnTextColor;
+    }
+    
+    // 二次弹窗自定义视图
+    __weak __typeof(self)weakSelf = self;
+    NSArray *agreementAlertViewWidgets = [self getValue:config key:@"agreementAlertViewWidgets"];
+    uiConfig.smsCustomAgreementAlertView = ^(UIView * _Nonnull superView, void (^ _Nonnull hidAlertView)(void)) {
+        weakSelf.hidAgreementAlertView = hidAlertView;
+        for (NSDictionary *widgetDic in agreementAlertViewWidgets) {
+            NSString *type = [self getValue:widgetDic key:@"type"];
+            if ([type isEqualToString:@"textView"]) {
+                [superView addSubview:[self addCustomTextWidget:widgetDic]];
+            }else if ([type isEqualToString:@"button"]){
+                UIButton *cancle = [self addCustomButtonWidget:widgetDic];
+                [superView addSubview:cancle];
+                [cancle addTarget:weakSelf action:@selector(cancelAgreementAlertView) forControlEvents:UIControlEventTouchUpInside];
+            }else{
+                
+            }
+        }
+    };
+    
+    NSDictionary *agreementAlertViewUIFrames = [self getValue:config key:@"agreementAlertViewUIFrames"];
+    
+    uiConfig.smsResetAgreementAlertViewFrameBlock = ^(NSValue * _Nullable __autoreleasing * _Nullable superViewFrame, NSValue * _Nullable __autoreleasing * _Nullable alertViewFrame, NSValue * _Nullable __autoreleasing * _Nullable titleFrame, NSValue * _Nullable __autoreleasing * _Nullable contentFrame, NSValue * _Nullable __autoreleasing * _Nullable buttonFrame) {
+        NSArray *superView = [agreementAlertViewUIFrames valueForKey:@"superViewFrame"];
+        if (superView && superView.count >= 4) {
+            *superViewFrame = [NSValue valueWithCGRect:CGRectMake([superView[0] intValue], [superView[1] intValue], [superView[2] intValue], [superView[3] intValue])];
+        }
+        NSArray *alertView = [agreementAlertViewUIFrames valueForKey:@"alertViewFrame"];
+        if (alertView && alertView.count >= 4) {
+            *alertViewFrame = [NSValue valueWithCGRect:CGRectMake([alertView[0] intValue], [alertView[1] intValue], [alertView[2] intValue], [alertView[3] intValue])];
+        }
+        NSArray *title = [agreementAlertViewUIFrames valueForKey:@"titleFrame"];
+        if (title && title.count >= 4) {
+            *titleFrame = [NSValue valueWithCGRect:CGRectMake([title[0] intValue], [title[1] intValue], [title[2] intValue], [title[3] intValue])];
+        }
+        NSArray *content = [agreementAlertViewUIFrames valueForKey:@"contentFrame"];
+        if (content && content.count >= 4) {
+            *contentFrame = [NSValue valueWithCGRect:CGRectMake([content[0] intValue], [content[1] intValue], [content[2] intValue], [content[3] intValue])];
+        }
+        NSArray *button = [agreementAlertViewUIFrames valueForKey:@"buttonFrame"];
+        if (button && button.count >= 4) {
+            *buttonFrame = [NSValue valueWithCGRect:CGRectMake([button[0] intValue], [button[1] intValue], [button[2] intValue], [button[3] intValue])];
+        }
+    };
     
 }
 

@@ -729,11 +729,17 @@ class JVUIConfig {
       JVIOSUIModalTransitionStyle.CoverVertical;
 
   /// 协议二次弹窗-iOS
+  double agreementAlertViewCornerRadius = 5.0; // 协议二次弹窗的圆角
+  int? agreementAlertViewBackgroundColor; // 协议二次弹窗背景颜色
+  String? agreementAlertViewBackgroundImgPath; //协议二次弹窗背景图片
+  String? agreementAlertViewTitleText; //协议二次弹窗标题文本
   int agreementAlertViewTitleTexSize = 14; // 协议二次弹窗标题文本样式
   int? agreementAlertViewTitleTextColor; //协议二次弹窗标题文本颜色
   JVTextAlignmentType agreementAlertViewContentTextAlignment =
       JVTextAlignmentType.center; //协议二次弹窗内容文本对齐方式
   int agreementAlertViewContentTextFontSize = 12; //协议二次弹窗内容文本字体大小
+  String? agreementAlertViewLogBtnText; //协议二次弹窗登录按钮文本
+  int? agreementAlertViewLogBtnTextFontSize; //协议二次弹窗登录按钮文本字体大小
   String? agreementAlertViewLoginBtnNormalImagePath; // 协议二次弹窗登录按钮背景图片 - 激活状态的图片
   String?
       agreementAlertViewLoginBtnPressedImagePath; // 协议二次弹窗登录按钮背景图片 - 高亮状态的图片
@@ -867,6 +873,11 @@ class JVUIConfig {
       "privacyNavTitleTitle": privacyNavTitleTitle ??= null,
       "textVerAlignment": textVerAlignment,
       //ios-协议的二次弹窗
+      "agreementAlertViewCornerRadius": agreementAlertViewCornerRadius,
+      "agreementAlertViewBackgroundColor": agreementAlertViewBackgroundColor,
+      "agreementAlertViewBackgroundImgPath":
+          agreementAlertViewBackgroundImgPath,
+      "agreementAlertViewTitleText": agreementAlertViewTitleText ??= null,
       "agreementAlertViewTitleTexSize": agreementAlertViewTitleTexSize,
       "agreementAlertViewTitleTextColor": agreementAlertViewTitleTextColor ??=
           Colors.black.value,
@@ -874,6 +885,9 @@ class JVUIConfig {
           getStringFromEnum(agreementAlertViewContentTextAlignment),
       "agreementAlertViewContentTextFontSize":
           agreementAlertViewContentTextFontSize,
+      "agreementAlertViewLogBtnText": agreementAlertViewLogBtnText,
+      "agreementAlertViewLogBtnTextFontSize":
+          agreementAlertViewLogBtnTextFontSize,
       "agreementAlertViewLoginBtnNormalImagePath":
           agreementAlertViewLoginBtnNormalImagePath ??= null,
       "agreementAlertViewLoginBtnPressedImagePath":
