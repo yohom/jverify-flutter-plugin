@@ -1453,12 +1453,12 @@ enum JVIOSTextBorderStyle {
   BorderStyleRoundedRect
 }
 
-String getStringFromEnum<T>(T) {
-  if (T == null) {
+String getStringFromEnum<T>(t) {
+  if (t == null) {
     return "";
   }
 
-  return T.toString().split('.').last;
+  return t.toString().split('.').last;
 }
 
 class JVPrivacy {
